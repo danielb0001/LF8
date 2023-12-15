@@ -1,2 +1,2 @@
-import ...
-def main 
+import os
+
