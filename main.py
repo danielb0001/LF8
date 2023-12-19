@@ -5,4 +5,3 @@ zahl = int(input(">"))
 quadrat = zahl*zahl
 
 print(f"Das Quadrat der eingegebene Zahl ist {quadrat}")
-
