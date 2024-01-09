@@ -103,3 +103,9 @@ if __name__ == '__main__':
         date_time.date_and_time()
         print("-------------------------------------------------------\n")
         time.sleep(3)
+        
+def test_function():
+    assert 5 == 5
+    
+    
+    
