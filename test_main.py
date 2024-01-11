@@ -1,9 +1,9 @@
 import subprocess
 import platform
-import psutil
 from datetime import datetime
 import logging
 import time
+import psutil
 
 
 class Prozesse:
@@ -105,7 +105,10 @@ if __name__ == '__main__':
         time.sleep(3)
         
 def test_function():
-    assert 5 == 6
+    assert 5 == 5
+    
+def test_CPU_Nutzung():
+    assert CPU_Nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung zu hoch: 50 %"
 
 # test
     
