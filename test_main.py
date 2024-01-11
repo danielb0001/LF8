@@ -105,7 +105,7 @@ if __name__ == '__main__':
         time.sleep(3)
         
 def test_function():
-    assert 5 == 5
+    assert 5 == 6
 
 # test
     
