@@ -65,7 +65,7 @@ class CPU_Nutzung:
         prozent = psutil.cpu_percent(interval=1, percpu=False)
         return prozent
 
-    def cpu_prozent(self, cpu_nutzung):
+    def cpu_prozent(cpu_nutzung):
         if cpu_nutzung < 40.0:
             print("CPU Auslastung in Ordnung und liegt bei:", cpu_nutzung, '%')
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
