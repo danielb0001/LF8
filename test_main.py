@@ -18,4 +18,4 @@ def test_CPU_Nutzung():
 def test_RAM_Nutzung():
     ram = RAM_Nutzung()
     assert ram.ram_warnung(50) == "RAM Auslastung ist in Ordnung und liegt bei: 50%"
-    assert ram.ram_warnung(90) == "WARNUNG! RAM Auslastung hoch: 90%"
+    assert ram.ram_warnung(90) == "WARNUNG! RAM Auslastung bei: 90%"
