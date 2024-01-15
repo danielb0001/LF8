@@ -1,13 +1,41 @@
 import subprocess
 import platform
 from datetime import datetime
-import logging
 import time
+import os
 import psutil
+import pandas as pd
 
+class Logging:
+    # def __init__(self):
+    # Get the current date
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    # Create the file name
+    file_name = './logs/' + current_date + '.csv'
+    # Check if the file exists
+    if not os.path.isfile(file_name):
+        # If the file doesn't exist, create an empty DataFrame and save it as a CSV file
+        df = pd.DataFrame([['Zeit', 'CPU Auslastung', 'RAM Auslastung']])
+        df.to_csv(file_name, index=False)
+        print(f'Created a new CSV file with the name: {file_name}')
+    else:
+        print(f'A CSV file with the name {file_name} already exists.')
+    
+    def append_values_to_log(self):
+        ram = RAM_Nutzung()
+        date = datetime.now()
+        # Assuming you have a CSV file named 'data.csv'
+        df = pd.read_csv(self.file_name)
+        # Append these variables as new columns to the dataframe
+        time = date.time().strftime("%H:%M:%S")
+        cpu_usage = psutil.cpu_percent(interval=1, percpu=False)
+        ram_usage = ram.ram_total()
+        new_row = [time, cpu_usage, ram_usage]
+        df.loc[len(df.index)] = new_row
+        # Save the updated dataframe back to the CSV file
+        df.to_csv(self.file_name, index=False)
 
 class Prozesse:
-
     def check_process(self):
         proc = 0
         if platform.system() == "Windows":
@@ -20,8 +48,9 @@ class Prozesse:
         elif platform.system() == "Linux":
             proc = subprocess.check_output("ps aux | wc -l", shell=True)
         print(platform.system(), platform.release())
-        anzahlProc = int(proc)
-        return anzahlProc
+        process_count = int(proc)
+        Logging.append_values_to_log(self,process_count,"Anzahl Prozesse")
+        return process_count
 
     def warning_process(self, anzahl):
         if anzahl > 200:
@@ -59,11 +88,11 @@ class RAM_Nutzung:
 
 class CPU_Nutzung:
 
-    def cpu_count(self):
+    def cpu_usage(self):
         anzahl = psutil.cpu_count()
         print('Anzahl logischer Prozessoren:', anzahl)
-        prozent = psutil.cpu_percent(interval=1, percpu=False)
-        return prozent
+        usage = psutil.cpu_percent(interval=1, percpu=False)
+        return usage
 
     def cpu_prozent(self,cpu_nutzung):
         if cpu_nutzung < 40.0:
@@ -81,7 +110,6 @@ class CPU_Nutzung:
 
 
 class Date_Time:
-
     def date_and_time(self):
         date = datetime.now()
         print("Datum:", date.date().strftime("%d %B, %Y"))
@@ -89,18 +117,20 @@ class Date_Time:
 
 
 if __name__ == '__main__':
-    proz = Prozesse()
+    # proz = Prozesse()
     ram = RAM_Nutzung()
     cpu = CPU_Nutzung()
     dt = Date_Time()
+    log = Logging()
 
     while True:
-        cpu.cpu_prozent(cpu.cpu_count())
+        cpu.cpu_prozent(cpu.cpu_usage())
         print('-')
         ram.ram_warning(ram.ram_total())
         print('-')
         dt.date_and_time()
         print("-------------------------------------------------------\n")
+        log.append_values_to_log()
         time.sleep(3)
         
 def test_function():
