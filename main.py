@@ -1,3 +1,5 @@
+"""Gibt Systemparameter aus und speichert sie in Logdatei
+"""
 import subprocess
 import platform
 from datetime import datetime
@@ -33,8 +35,7 @@ class Logging:
         zeit = datum.time().strftime("%H:%M:%S")
         cpu_nutzung = psutil.cpu_percent(interval=1, percpu=False)
         ram_nutzung = ram.ram_nutzung()
-        neue_zeile = [zeit, cpu_nutzung, ram_nutzung]
-        df.loc[len(df.index)] = neue_zeile
+        df.loc[len(df.index)] = [zeit, cpu_nutzung, ram_nutzung]
         # Save the updated dataframe back to the CSV file
         df.to_csv(self.dateipfad, index=False)
 
