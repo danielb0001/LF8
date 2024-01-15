@@ -89,27 +89,23 @@ class Date_Time:
 
 
 if __name__ == '__main__':
-    prozesse = Prozesse()
-    ram_nutzung = RAM_Nutzung()
-    cpu_nutzung = CPU_Nutzung()
-    date_time = Date_Time()
+    proz = Prozesse()
+    ram = RAM_Nutzung()
+    cpu = CPU_Nutzung()
+    dt = Date_Time()
 
     while True:
-        cpu_auslastung = cpu_nutzung.cpu_count()
-        cpu_nutzung.cpu_prozent(cpu_auslastung)
+        cpu.cpu_prozent(cpu.cpu_count())
         print('-')
-        ram_nutzung.ram_warning(ram_nutzung.ram_total())
+        ram.ram_warning(ram.ram_total())
         print('-')
-        date_time.date_and_time()
+        dt.date_and_time()
         print("-------------------------------------------------------\n")
         time.sleep(3)
         
 def test_function():
     assert 5 == 5
-    
+
 def test_CPU_Nutzung():
     nutzung = CPU_Nutzung()
     assert(nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung hoch: 50 %")
-
-# test
-    
