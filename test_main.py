@@ -108,7 +108,8 @@ def test_function():
     assert 5 == 5
     
 def test_CPU_Nutzung():
-    assert(CPU_Nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung hoch: 50 %")
+    nutzung = CPU_Nutzung()
+    assert(nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung hoch: 50 %")
 
 # test
     
