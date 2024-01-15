@@ -1,14 +1,13 @@
-name: Run Python tests
+name: Run Unit tests
 on: [push]
 
 jobs:
   build:
-    name: Run tests
+    name: Run Unit tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.11"]
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -16,7 +15,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install pytest pytest-md pytest-emoji psutil
+        run: pip install pytest pytest-md pytest-emoji psutil pandas
       - uses: pavelzw/pytest-action@v2
         with:
           emoji: false
