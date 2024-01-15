@@ -19,3 +19,8 @@ def test_RAM_Nutzung():
     ram = RAM_Nutzung()
     assert ram.ram_warnung(50) == "RAM Auslastung ist in Ordnung und liegt bei: 50%"
     assert ram.ram_warnung(90) == "WARNUNG! RAM Auslastung bei: 90%"
+
+def test_Prozesse():
+    prz = Prozesse()
+    assert prz.warnung_prozesse(100) == "Die Anzahl der Prozesse liegt unter dem Schwellenwert! bei: 100"
+    assert prz.warnung_prozesse(300) == "WARNUNG! Anzahl der Prozesse liegt über dem Schwellenwert! bei: 300"

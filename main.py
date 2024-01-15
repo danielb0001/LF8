@@ -23,6 +23,8 @@ class Logging:
         print(f'Eine Datei mit dem Pfad {dateipfad} existiert bereits.')
     
     def update_logdatei(self):
+        """liest aktuelle Werte aus und speichert sie in Logdatei
+        """
         ram = RAM_Nutzung()
         datum = datetime.now()
         # Öffne CSV Datei 
@@ -54,15 +56,12 @@ class Prozesse:
         process_count = int(proc)
         return process_count
 
-    def warnung_process(self, anzahl):
+    def warnung_prozesse(self, anzahl):
         if anzahl > 200:
-            print("WARNUNG! Anzahl der Prozesse liegt über dem Schwellenwert!", anzahl)
-            ausgabe = "WARNUNG! Anzahl der Prozesse liegt über dem Schwellenwert! " + str(anzahl)
+            ausgabe = "WARNUNG! Anzahl der Prozesse liegt über dem Schwellenwert! bei: " + str(anzahl)
             return ausgabe
-        else:
-            print("Die Anzahl der Prozesse liegt unter dem Schwellenwert! bei:", anzahl)
-            ausgabe = "Die Anzahl der Prozesse liegt unter dem Schwellenwert! bei: " + str(anzahl)
-            return ausgabe
+        ausgabe = "Die Anzahl der Prozesse liegt unter dem Schwellenwert! bei: " + str(anzahl)
+        return ausgabe
 
 
 class RAM_Nutzung:
