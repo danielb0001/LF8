@@ -37,7 +37,7 @@ class Logging:
         df.to_csv(self.dateipfad, index=False)
 
 class Prozesse:
-    """im jetzigen Zustand nicht benutzt, da kein aussagekräftiger Wert
+    """im jetzigen Zustand nicht benutzt, da nur bedingt aussagekräftiger Wert
     """
     def check_prozesse(self):
         proc = 0
