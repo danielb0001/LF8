@@ -3,6 +3,7 @@ import platform
 from datetime import datetime
 import logging
 import time
+from tracemalloc import StatisticDiff
 import psutil
 
 
@@ -65,18 +66,19 @@ class CPU_Nutzung:
         prozent = psutil.cpu_percent(interval=1, percpu=False)
         return prozent
 
-    def cpu_prozent(cpu_nutzung):
+    def cpu_prozent(self):
+        cpu_nutzung = psutil.cpu_percent(interval=1, percpu=False)
         if cpu_nutzung < 40.0:
-            print("CPU Auslastung in Ordnung und liegt bei:", cpu_nutzung, '%')
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
+            print(ausgabe)
             return ausgabe
         if cpu_nutzung > 40.0 and cpu_nutzung < 60.0:
-            print("WARNUNG! CPU Auslastung zu hoch:", cpu_nutzung, '%')
             ausgabe = "WARNUNG! CPU Auslastung zu hoch: " + str(cpu_nutzung) + ' %'
+            print(ausgabe)
             return ausgabe
         if cpu_nutzung > 60.0:
-            print("KRITISCHER BEREICH! Umgehend Rechner/Server ausschalten!:", cpu_nutzung, '%')
             ausgabe = "KRITISCHER BEREICH! Umgehend Rechner/Server ausschalten! : " + str(cpu_nutzung) + '%'
+            print(ausgabe)
             return ausgabe
 
 
@@ -95,20 +97,22 @@ if __name__ == '__main__':
     date_time = Date_Time()
 
     while True:
-        cpu_auslastung = cpu_nutzung.cpu_count()
-        cpu_nutzung.cpu_prozent(cpu_auslastung)
-        print('-')
+        cpu_nutzung.cpu_prozent()
+        print('-'*40)
         ram_nutzung.ram_warning(ram_nutzung.ram_total())
-        print('-')
+        print('-'*40)
         date_time.date_and_time()
-        print("-------------------------------------------------------\n")
+        print('-'*60+'\n')
+        # print("\n")
         time.sleep(3)
         
+        
+# Unit Tests, Funktionen werden mit dem Modul pytest auf GitHub Actions ausgeführt. 
+ 
 def test_function():
     assert 5 == 5
     
 def test_CPU_Nutzung():
     assert(CPU_Nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung zu hoch: 50 %")
 
-# test
     
