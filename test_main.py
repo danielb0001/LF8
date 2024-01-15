@@ -94,15 +94,15 @@ class CPU_Nutzung:
         return usage
 
     def cpu_warning(self,cpu_nutzung):
-        if cpu_nutzung < 40.0:
+        if cpu_nutzung < 50.0:
             print("CPU Auslastung in Ordnung und liegt bei:", cpu_nutzung, '%')
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
-        if cpu_nutzung > 50.0 and cpu_nutzung < 90.0:
+        if cpu_nutzung >= 50.0 and cpu_nutzung < 90.0:
             print("WARNUNG! CPU Auslastung bei:", cpu_nutzung, '%')
             ausgabe = "WARNUNG! CPU Auslastung bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
-        if cpu_nutzung > 90.0:
+        if cpu_nutzung >= 90.0:
             print("KRITISCHER BEREICH CPU Auslastung bei:", cpu_nutzung, '%')
             ausgabe = "KRITISCHER BEREICH CPU Auslastung bei:" + str(cpu_nutzung) + '%'
             return ausgabe
