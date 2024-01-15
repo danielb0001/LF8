@@ -7,35 +7,39 @@ import psutil
 import pandas as pd
 
 class Logging:
-    # Get the current date
+    """KLasse um Logs zu erstellen
+    """
+    # Erzeuge String mit aktuellem Datum
     current_date = datetime.now().strftime('%Y-%m-%d')
-    # Create the file name
-    file_name = './logs/' + current_date + '.csv'
-    # Check if the file exists
-    if not os.path.isfile(file_name):
-        # If the file doesn't exist, create an empty DataFrame and save it as a CSV file
+    # definiere Dateinamen mit Pfad
+    dateipfad = './logs/' + current_date + '.csv'
+    # Cecke ob die Date bereits existiert
+    if not os.path.isfile(dateipfad):
+        # Falls Datei nicht existiert, erstelle einen leeren DataFrame und speichere ihn als CSV 
         df = pd.DataFrame([['Zeit', 'CPU Auslastung', 'RAM Auslastung']])
-        df.to_csv(file_name, index=False)
-        print(f'Created a new CSV file with the name: {file_name}')
+        df.to_csv(dateipfad, index=False)
+        print(f'Datei mit dem Pfad {dateipfad} erstellt.')
     else:
-        print(f'A CSV file with the name {file_name} already exists.')
+        print(f'Eine Datei mit dem Pfad {dateipfad} existiert bereits.')
     
-    def append_values_to_logfile(self):
+    def update_logdatei(self):
         ram = RAM_Nutzung()
-        date = datetime.now()
-        # Open a CSV file 
-        df = pd.read_csv(self.file_name)
-        # Append these variables as new columns to the dataframe
-        time = date.time().strftime("%H:%M:%S")
-        cpu_usage = psutil.cpu_percent(interval=1, percpu=False)
-        ram_usage = ram.ram_usage()
-        new_row = [time, cpu_usage, ram_usage]
-        df.loc[len(df.index)] = new_row
+        datum = datetime.now()
+        # Öffne CSV Datei 
+        df = pd.read_csv(self.dateipfad)
+        # Füge Monitorwerte der Logdatei hinzu
+        zeit = datum.time().strftime("%H:%M:%S")
+        cpu_nutzung = psutil.cpu_percent(interval=1, percpu=False)
+        ram_nutzung = ram.ram_nutzung()
+        neue_zeile = [zeit, cpu_nutzung, ram_nutzung]
+        df.loc[len(df.index)] = neue_zeile
         # Save the updated dataframe back to the CSV file
-        df.to_csv(self.file_name, index=False)
+        df.to_csv(self.dateipfad, index=False)
 
 class Prozesse:
-    def check_process(self):
+    """im jetzigen Zustand nicht benutzt, da kein aussagekräftiger Wert
+    """
+    def check_prozesse(self):
         proc = 0
         if platform.system() == "Windows":
             proc = subprocess.check_output("tasklist.exe|find /i \" K\" /c", shell=True)
@@ -48,7 +52,6 @@ class Prozesse:
             proc = subprocess.check_output("ps aux | wc -l", shell=True)
         print(platform.system(), platform.release())
         process_count = int(proc)
-        Logging.append_values_to_log(self,process_count,"Anzahl Prozesse")
         return process_count
 
     def warning_process(self, anzahl):
@@ -63,43 +66,69 @@ class Prozesse:
 
 
 class RAM_Nutzung:
-
-    def ram_usage(self):
+    """RAM Nutzungs Funktionen
+    """
+    def ram_nutzung(self):
+        """Gibt verfügbaren und benutzten Ram aus.
+        
+        Returns:
+            float: Nutzung in Prozent
+        """
         vvm = psutil.virtual_memory()
-        RAM_total = round(vvm.total / 1024 / 1024 / 1024, 2)
-        RAM_available = round(vvm.available / 1024 / 1024 / 1024, 2)
+        ram_total = round(vvm.total / 1024 / 1024 / 1024, 2)
+        ram_verfugbar = round(vvm.available / 1024 / 1024 / 1024, 2)
         nutzung = vvm.percent
-        print('Nutzbarer RAM insgesamt:', RAM_total, 'GB')
-        print('Verfügbarer RAM:', RAM_available, 'GB')
+        print('Nutzbarer RAM insgesamt:', ram_total, 'GB')
+        print('Verfügbarer RAM:', ram_verfugbar, 'GB')
         return nutzung
 
-    def ram_warning(self, ram_nutzung):
-        #ram_nutzung = 61.0
-        if ram_nutzung > 60.0:
+    def ram_warnung(self, ram_nutzung):
+        """Gibt je nach Nutzung unterschiedliche Warnungen aus.
+
+        Args:
+            ram_nutzung (float): bekommt Wert normalerweise von self.ram_nutzung
+
+        Returns:
+            str: Ausgabetext
+        """
+        if ram_nutzung > 85.0:
             print("WARNUNG! RAM Auslastung hoch:", ram_nutzung, '%')
             ausgabe = "WARNUNG! RAM Auslastung hoch: " + str(ram_nutzung) + ' %'
             return ausgabe
-        else:
-            print("RAM Auslastung ist in Ordnung und liegt bei:", ram_nutzung, '%')
-            ausgabe = "RAM Auslastung ist in Ordnung und liegt bei: " + str(ram_nutzung) + ' %'
-            return ausgabe
+        print("RAM Auslastung ist in Ordnung und liegt bei:", ram_nutzung, '%')
+        ausgabe = "RAM Auslastung ist in Ordnung und liegt bei: " + str(ram_nutzung) + ' %'
+        return ausgabe
 
 
 class CPU_Nutzung:
+    """CPU Nutzungs Funktionen 
+    """
+    def cpu_nutzung(self):
+        """Gibt Anzahl der logischen Prozessoren aus.
 
-    def cpu_usage(self):
+        Returns:
+            float: Nutzung in Prozent 
+        """
         anzahl = psutil.cpu_count()
         print('Anzahl logischer Prozessoren:', anzahl)
-        usage = psutil.cpu_percent(interval=1, percpu=False)
-        return usage
+        nutzung = psutil.cpu_percent(interval=1, percpu=False)
+        return nutzung
 
     def cpu_warning(self,cpu_nutzung):
+        """Gibt je nach Nutzung unterschiedliche Warnungen aus.
+
+        Args:
+            cpu_nutzung (float):  bekommt Wert normalerweise von self.cpu_nutzung
+
+        Returns:
+            str: Ausgabetext
+        """
         if cpu_nutzung < 50.0:
             print("CPU Auslastung in Ordnung und liegt bei:", cpu_nutzung, '%')
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
             print(ausgabe)
             return ausgabe
-        if cpu_nutzung >= 50.0 and cpu_nutzung < 90.0:
+        if 50.0 < cpu_nutzung < 90.0:
             print("WARNUNG! CPU Auslastung bei:", cpu_nutzung, '%')
             ausgabe = "WARNUNG! CPU Auslastung bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
@@ -124,13 +153,13 @@ if __name__ == '__main__':
     log = Logging()
 
     while True:
-        cpu.cpu_warning(cpu.cpu_usage())
+        cpu.cpu_warning(cpu.cpu_nutzung())
         print('-')
-        ram.ram_warning(ram.ram_usage())
+        ram.ram_warnung(ram.ram_nutzung())
         print('-')
         dt.date_and_time()
         print("-------------------------------------------------------\n")
-        log.append_values_to_logfile()
+        log.update_logdatei()
         time.sleep(3)
         
         
