@@ -7,7 +7,6 @@ import psutil
 import pandas as pd
 
 class Logging:
-    # def __init__(self):
     # Get the current date
     current_date = datetime.now().strftime('%Y-%m-%d')
     # Create the file name
@@ -21,15 +20,15 @@ class Logging:
     else:
         print(f'A CSV file with the name {file_name} already exists.')
     
-    def append_values_to_log(self):
+    def append_values_to_logfile(self):
         ram = RAM_Nutzung()
         date = datetime.now()
-        # Assuming you have a CSV file named 'data.csv'
+        # Open a CSV file 
         df = pd.read_csv(self.file_name)
         # Append these variables as new columns to the dataframe
         time = date.time().strftime("%H:%M:%S")
         cpu_usage = psutil.cpu_percent(interval=1, percpu=False)
-        ram_usage = ram.ram_total()
+        ram_usage = ram.ram_usage()
         new_row = [time, cpu_usage, ram_usage]
         df.loc[len(df.index)] = new_row
         # Save the updated dataframe back to the CSV file
@@ -65,7 +64,7 @@ class Prozesse:
 
 class RAM_Nutzung:
 
-    def ram_total(self):
+    def ram_usage(self):
         vvm = psutil.virtual_memory()
         RAM_total = round(vvm.total / 1024 / 1024 / 1024, 2)
         RAM_available = round(vvm.available / 1024 / 1024 / 1024, 2)
@@ -77,8 +76,8 @@ class RAM_Nutzung:
     def ram_warning(self, ram_nutzung):
         #ram_nutzung = 61.0
         if ram_nutzung > 60.0:
-            print("WARNUNG! RAM Auslastung zu hoch:", ram_nutzung, '%')
-            ausgabe = "WARNUNG! RAM Auslastung zu hoch: " + str(ram_nutzung) + ' %'
+            print("WARNUNG! RAM Auslastung hoch:", ram_nutzung, '%')
+            ausgabe = "WARNUNG! RAM Auslastung hoch: " + str(ram_nutzung) + ' %'
             return ausgabe
         else:
             print("RAM Auslastung ist in Ordnung und liegt bei:", ram_nutzung, '%')
@@ -94,18 +93,18 @@ class CPU_Nutzung:
         usage = psutil.cpu_percent(interval=1, percpu=False)
         return usage
 
-    def cpu_prozent(self,cpu_nutzung):
+    def cpu_warning(self,cpu_nutzung):
         if cpu_nutzung < 40.0:
             print("CPU Auslastung in Ordnung und liegt bei:", cpu_nutzung, '%')
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
-        if cpu_nutzung > 40.0 and cpu_nutzung < 60.0:
-            print("WARNUNG! CPU Auslastung hoch:", cpu_nutzung, '%')
-            ausgabe = "WARNUNG! CPU Auslastung hoch: " + str(cpu_nutzung) + ' %'
+        if cpu_nutzung > 50.0 and cpu_nutzung < 90.0:
+            print("WARNUNG! CPU Auslastung bei:", cpu_nutzung, '%')
+            ausgabe = "WARNUNG! CPU Auslastung bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
-        if cpu_nutzung > 60.0:
-            print("KRITISCHER BEREICH:", cpu_nutzung, '%')
-            ausgabe = "KRITISCHER BEREICH:" + str(cpu_nutzung) + '%'
+        if cpu_nutzung > 90.0:
+            print("KRITISCHER BEREICH CPU Auslastung bei:", cpu_nutzung, '%')
+            ausgabe = "KRITISCHER BEREICH CPU Auslastung bei:" + str(cpu_nutzung) + '%'
             return ausgabe
 
 
@@ -118,19 +117,19 @@ class Date_Time:
 
 if __name__ == '__main__':
     # proz = Prozesse()
-    ram = RAM_Nutzung()
     cpu = CPU_Nutzung()
+    ram = RAM_Nutzung()
     dt = Date_Time()
     log = Logging()
 
     while True:
-        cpu.cpu_prozent(cpu.cpu_usage())
+        cpu.cpu_warning(cpu.cpu_usage())
         print('-')
-        ram.ram_warning(ram.ram_total())
+        ram.ram_warning(ram.ram_usage())
         print('-')
         dt.date_and_time()
         print("-------------------------------------------------------\n")
-        log.append_values_to_log()
+        log.append_values_to_logfile()
         time.sleep(3)
         
 def test_function():
@@ -138,4 +137,4 @@ def test_function():
 
 def test_CPU_Nutzung():
     nutzung = CPU_Nutzung()
-    assert(nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung hoch: 50 %")
+    assert(nutzung.cpu_warning(50) == "WARNUNG! CPU Auslastung hoch: 50 %")

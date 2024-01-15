@@ -1,0 +1,19 @@
+title monitor
+user->main.py:
+main.py->CPU_Nutzung:erzeugt Objektinstanz
+main.py->RAM_Nutzung:erzeugt Objektinstanz
+main.py->Date_Time:erzeugt Objektinstanz
+main.py->Logging:erzeugt Objektinstanz
+Logging->Logging:überprüft ob eine aktuelle Logdatei vorhanden ist
+
+loop
+main.py->CPU_Nutzung:cpu_warning
+CPU_Nutzung->CPU_Nutzung:cpu_usage
+user<--CPU_Nutzung: zeigt CPU Nutzung
+main.py->RAM_Nutzung:ram_warning
+RAM_Nutzung->RAM_Nutzung:ram_usage
+user<--RAM_Nutzung: zeigt RAM Nutzung
+main.py->Date_Time: date_and_time
+Date_Time-->user: zeigt Datum und Uhrzeit
+main.py->Logging: append_values_to_logfile
+end
