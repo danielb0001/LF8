@@ -71,12 +71,12 @@ class CPU_Nutzung:
             ausgabe = "CPU Auslastung in Ordnung und liegt bei: " + str(cpu_nutzung) + ' %'
             return ausgabe
         if cpu_nutzung > 40.0 and cpu_nutzung < 60.0:
-            print("WARNUNG! CPU Auslastung zu hoch:", cpu_nutzung, '%')
-            ausgabe = "WARNUNG! CPU Auslastung zu hoch: " + str(cpu_nutzung) + ' %'
+            print("WARNUNG! CPU Auslastung hoch:", cpu_nutzung, '%')
+            ausgabe = "WARNUNG! CPU Auslastung hoch: " + str(cpu_nutzung) + ' %'
             return ausgabe
         if cpu_nutzung > 60.0:
-            print("KRITISCHER BEREICH! Umgehend Rechner/Server ausschalten!:", cpu_nutzung, '%')
-            ausgabe = "KRITISCHER BEREICH! Umgehend Rechner/Server ausschalten! : " + str(cpu_nutzung) + '%'
+            print("KRITISCHER BEREICH:", cpu_nutzung, '%')
+            ausgabe = "KRITISCHER BEREICH:" + str(cpu_nutzung) + '%'
             return ausgabe
 
 
@@ -108,7 +108,7 @@ def test_function():
     assert 5 == 5
     
 def test_CPU_Nutzung():
-    assert(CPU_Nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung zu hoch: 50 %")
+    assert(CPU_Nutzung.cpu_prozent(50) == "WARNUNG! CPU Auslastung hoch: 50 %")
 
 # test
     
