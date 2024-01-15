@@ -92,11 +92,11 @@ class RAM_Nutzung:
             str: Ausgabetext
         """
         if ram_nutzung > 85.0:
-            print("WARNUNG! RAM Auslastung hoch:", ram_nutzung, '%')
-            ausgabe = "WARNUNG! RAM Auslastung hoch: " + str(ram_nutzung) + ' %'
+            ausgabe = "WARNUNG! RAM Auslastung bei: " + str(ram_nutzung) + '%'
+            print(ausgabe)
             return ausgabe
-        print("RAM Auslastung ist in Ordnung und liegt bei:", ram_nutzung, '%')
-        ausgabe = "RAM Auslastung ist in Ordnung und liegt bei: " + str(ram_nutzung) + ' %'
+        ausgabe = "RAM Auslastung ist in Ordnung und liegt bei: " + str(ram_nutzung) + '%'
+        print(ausgabe)
         return ausgabe
 
 
