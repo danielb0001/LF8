@@ -23,7 +23,7 @@ class Logging:
         print(f'Datei mit dem Pfad {dateipfad} erstellt.')
     else:
         print(f'Eine Datei mit dem Pfad {dateipfad} existiert bereits.')
-    
+
     def update_logdatei(self):
         """liest aktuelle Werte aus und speichert sie in Logdatei
         """
@@ -136,19 +136,18 @@ class CPU_Nutzung:
             print(ausgabe)
             return ausgabe
 
-
-class Date_Time:
-    def date_and_time(self):
-        date = datetime.now()
-        print("Datum:", date.date().strftime("%d %B, %Y"))
-        print("Uhrzeit:", date.time().strftime("%H:%M Uhr"))
+def date_and_time():
+    """Gibt Datum und Uhrzeit aus
+    """
+    date = datetime.now()
+    print("Datum:", date.date().strftime("%d %B, %Y"))
+    print("Uhrzeit:", date.time().strftime("%H:%M Uhr"))
 
 
 if __name__ == '__main__':
     # proz = Prozesse()
     cpu = CPU_Nutzung()
     ram = RAM_Nutzung()
-    dt = Date_Time()
     log = Logging()
 
     while True:
@@ -156,7 +155,7 @@ if __name__ == '__main__':
         print('-')
         ram.ram_warnung(ram.ram_nutzung())
         print('-')
-        dt.date_and_time()
+        date_and_time()
         print("-------------------------------------------------------\n")
         log.update_logdatei()
         time.sleep(3)
